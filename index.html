@@ -1,43 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Smart Timetable Reminder</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css"/>
+  <!-- PDF.js (for text-based PDFs) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.min.js" defer></script>
+  <!-- Tesseract.js (fallback OCR for image PDFs/images) -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js" defer></script>
 </head>
 <body>
   <div class="container">
     <h1>📅 Smart Timetable Reminder</h1>
+    <p class="subtitle">Upload your TIMETABLE (PDF/image). We’ll extract the time slots and notify you with all details in each box (subject, section, room, etc.).</p>
 
-    <!-- Timetable Input Form -->
-    <form id="timetable-form">
-      <input type="text" id="subject" placeholder="Subject" required>
-      <select id="day" required>
-        <option value="">Select Day</option>
-        <option>Monday</option>
-        <option>Tuesday</option>
-        <option>Wednesday</option>
-        <option>Thursday</option>
-        <option>Friday</option>
-        <option>Saturday</option>
-      </select>
-      <input type="time" id="time" required>
-      <button type="submit">Add Class</button>
-    </form>
+    <div class="card">
+      <label class="upload-label" for="fileInput">Drop your timetable or click to upload (PDF, JPG, PNG)</label>
+      <input id="fileInput" type="file" accept=".pdf,.png,.jpg,.jpeg" />
+      <div id="fileInfo" class="muted"></div>
+      <div id="previewArea"></div>
+      <div class="actions">
+        <button id="parseBtn" class="primary">Extract & Save</button>
+        <button id="clearBtn" class="ghost">Clear Timetable</button>
+      </div>
+    </div>
 
-    <!-- Timetable Display -->
-    <h2>Your Timetable</h2>
-    <table id="timetable">
-      <thead>
-        <tr>
-          <th>Subject</th>
-          <th>Day</th>
-          <th>Time</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <div class="card">
+      <h2>Your Parsed Timetable</h2>
+      <p class="muted">Detected entries will appear here. Each one includes the <b>day</b>, <b>start–end time</b>, and the full <b>details from the box</b>.</p>
+      <table id="timetable">
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Notifications</h2>
+      <p class="muted">We’ll notify you <b>5 minutes before</b> and <b>exactly at start time</b> for today’s classes.</p>
+      <div class="actions">
+        <button id="startNotif" class="primary">Start Notifications</button>
+        <button id="stopNotif" class="danger">Stop Notifications</button>
+      </div>
+      <div id="notifStatus" class="muted"></div>
+    </div>
+
+    <footer>
+      <small>Data is saved locally on your device (localStorage). No server needed.</small>
+    </footer>
   </div>
 
   <script src="script.js"></script>
