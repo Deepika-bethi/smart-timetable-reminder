@@ -9,22 +9,35 @@
 <body>
   <div class="container">
     <h1>📅 Smart Timetable Reminder</h1>
-    <p>Upload your timetable file to set up reminders.</p>
 
-    <!-- Upload section -->
-    <div class="upload-box">
-      <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx">
-      <button onclick="uploadFile()">Upload Timetable</button>
-    </div>
+    <!-- Timetable Input Form -->
+    <form id="timetable-form">
+      <input type="text" id="subject" placeholder="Subject" required>
+      <select id="day" required>
+        <option value="">Select Day</option>
+        <option>Monday</option>
+        <option>Tuesday</option>
+        <option>Wednesday</option>
+        <option>Thursday</option>
+        <option>Friday</option>
+        <option>Saturday</option>
+      </select>
+      <input type="time" id="time" required>
+      <button type="submit">Add Class</button>
+    </form>
 
-    <!-- Placeholder for showing uploaded file -->
-    <div id="filePreview"></div>
-
-    <!-- Reminder toggle -->
-    <div class="reminder-control">
-      <button onclick="startReminders()">Start Notifications</button>
-      <button onclick="stopReminders()">Stop Notifications</button>
-    </div>
+    <!-- Timetable Display -->
+    <h2>Your Timetable</h2>
+    <table id="timetable">
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Day</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
   </div>
 
   <script src="script.js"></script>
