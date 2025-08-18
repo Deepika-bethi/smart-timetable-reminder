@@ -1,38 +1,52 @@
-let reminderInterval = null;
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("timetable-form");
+  const tbody = document.querySelector("#timetable tbody");
 
-function uploadFile() {
-  const fileInput = document.getElementById("fileInput");
-  const file = fileInput.files[0];
+  let timetable = JSON.parse(localStorage.getItem("timetable")) || [];
 
-  if (!file) {
-    alert("Please select a file!");
-    return;
+  // Render timetable
+  function renderTable() {
+    tbody.innerHTML = "";
+    timetable.forEach(entry => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${entry.subject}</td><td>${entry.day}</td><td>${entry.time}</td>`;
+      tbody.appendChild(tr);
+    });
   }
 
-  document.getElementById("filePreview").innerHTML = 
-    `<p>Uploaded: <b>${file.name}</b></p>`;
-}
+  renderTable();
 
-function startReminders() {
-  if (Notification.permission !== "granted") {
+  // Add new entry
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    const subject = document.getElementById("subject").value;
+    const day = document.getElementById("day").value;
+    const time = document.getElementById("time").value;
+
+    const entry = { subject, day, time };
+    timetable.push(entry);
+    localStorage.setItem("timetable", JSON.stringify(timetable));
+
+    renderTable();
+    form.reset();
+  });
+
+  // Notifications
+  if ("Notification" in window && Notification.permission !== "granted") {
     Notification.requestPermission();
   }
 
-  if (!reminderInterval) {
-    reminderInterval = setInterval(() => {
-      new Notification("Class Reminder", {
-        body: "Check your timetable! 📖",
-        icon: "https://cdn-icons-png.flaticon.com/512/2910/2910768.png"
-      });
-    }, 60000); // every 1 min (for demo, later change to class timings)
-    alert("Notifications started!");
-  }
-}
+  setInterval(() => {
+    const now = new Date();
+    const currentDay = now.toLocaleDateString("en-US", { weekday: "long" });
+    const currentTime = now.toTimeString().slice(0,5); // HH:MM
 
-function stopReminders() {
-  if (reminderInterval) {
-    clearInterval(reminderInterval);
-    reminderInterval = null;
-    alert("Notifications stopped!");
-  }
-}
+    timetable.forEach(entry => {
+      if (entry.day === currentDay && entry.time === currentTime) {
+        new Notification("Class Reminder", {
+          body: `Your ${entry.subject} class starts now!`
+        });
+      }
+    });
+  }, 60000); // check every minute
+});
