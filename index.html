@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Timetable Reminder</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>📅 Smart Timetable Reminder</h1>
+    <p>Upload your timetable file to set up reminders.</p>
+
+    <!-- Upload section -->
+    <div class="upload-box">
+      <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx">
+      <button onclick="uploadFile()">Upload Timetable</button>
+    </div>
+
+    <!-- Placeholder for showing uploaded file -->
+    <div id="filePreview"></div>
+
+    <!-- Reminder toggle -->
+    <div class="reminder-control">
+      <button onclick="startReminders()">Start Notifications</button>
+      <button onclick="stopReminders()">Stop Notifications</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
